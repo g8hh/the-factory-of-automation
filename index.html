@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<head>
+	<title>The Factory of Automation</title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+	<link rel="icon" href="images/favicon.ico" type="image/icon type" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="js/important/break_eternity.js"></script>
+	<script src="js/important/playerControl.js"></script>
+	<script src="js/important/format.js"></script>
+	<script src="js/important/temp.js"></script>
+	<script src="js/important/v.js" defer></script>
+	
+	<script src="js/main/game.js"></script>
+	<script src="js/main/upgs.js"></script>
+	<script src="js/main/auto.js"></script>
+	<script src="js/main/materials.js"></script>
+	<script src="js/main/milestones.js"></script>
+	<script src="js/main/supercharger.js"></script>
+	<script src="js/main/radioactivity.js"></script>
+	
+	<script src="js/eclipse/eclipse.js"></script>
+	<script src="js/eclipse/apparatus.js"></script>
+</head>
+<body onload="loadGame()" style="width: 100%; min-height: 100%; margin: 0;">
+	<div id="app" style="width: 100%; min-height: 100%; position: absolute; top: 0;">
+		<div style="width: 100%; min-height: 100%; position: absolute; top: 0; z-index: -2; transition-duration: 0s;" v-bind:style="{filter: 'brightness('+((tmp.mta.toLowerCase()=='milestones'||tmp.mta.toLowerCase()=='supercharger')?'50':'20')+'%)', color: 'white', [(earlyMaterial(tmp.mta)||tab!='Main')?'???':'background-color']: getMaterialColor(tmp.mtd[tmp.mti], .7)}" v-bind:class="{[tmp.mta.toLowerCase()+'_bg']: true}"></div>
+		<div id="mainDiv" style="z-index: 1;">
+			<table class="band" style="background-color: #3b3b3b; border-bottom: 3px solid #6b6b6b;">
+				<tr>
+					<td style="position: absolute; right: 5px; top: 15px; font-size: 20px;"><b>v{{current_version_display}}</b></td>
+					<td v-for="t in tabData.allTabs"><button v-if="tabData.tabUnlocks[t]()" v-bind:class="{tab: true, unlocked: true, [t.toLowerCase()+'_btn']: true}" v-on:click="showTab(t)" style="font-weight: bold; width: 120px; height: 50px;">{{t}}</button></td>
+				</tr>
+			</table>
+			<div v-if="tab=='Options'">
+				<table class="band" style="width: 200px; background-color: #3b3b3b; border: 3px solid #6b6b6b; border-top: none;">
+					<tr>
+						<td><a class="btnlink" href="http://discord.gg/wwQfgPa" target="_blank" style="font-size: 15px; background-color: #36393e; color: white; text-shadow: 0px 0px 7px black; height: 45px;"><div style="margin-top: calc(50% - 24px)">DISCORD</div></a></td>
+						<td><a class="btnlink" href="http://patreon.com/Jacorb90" target="_blank" style="font-size: 15px; background-color: #eb6b34; height: 45px; color: white;"><div style="margin-top: calc(50% - 24px)">PATREON</div></a></td>
+					</tr>
+				</table><br><br><table>
+					<tr>
+						<td><button class="unlocked options" onclick="toggleAutosave()" style="font-size: 13px;">Autosave<br>{{player.autosave?"ON":"OFF"}}</button><br><button class="unlocked options" onclick="toggleOfflineProd()" style="font-size: 11px;">Offline Prod<br>{{player.offProd?"ON":"OFF"}}</button></td>
+						<td><button class="unlocked options" onclick="save()">Save</button><br>
+						<button class="unlocked options" onclick="importSave()">Import</button></td>
+						<td><button class="unlocked options" style="background-color: #820000;" onclick="hardReset()">HARD RESET</button><br>
+						<button class="unlocked options" onclick="exportSave()">Export</button></td>
+					</tr>
+				</table><br><br>
+				<a href="changelog.txt" target="_blank" style="color: white; font-weight: bold; font-size: 17px;">Changelog</a><br><br>
+			</div>
+			<div v-if="tab=='Milestones'">
+				<br><br><span v-if="hasMilestone(6)">Milestone Charge: <span class="supercharger_txt" style="font-size: 30px; font-weight: bold;">{{Math.max(tmp.tsca-player.supercharger.selected.length, 0)}}</span><br><br><i>You can Supercharge your Milestones by using Milestone Charge!</i></span><br>
+				<table>
+					<tr v-for="m in Math.ceil(MILESTONES_AMT/2)" v-if="m<=1||hasMilestone(m*2-2)||(m==8&&player.eclipse.times.gte(1))" style="display: flex;">
+						<td v-bind:class="{milestone: true, supercharger_btn: hasSuperMilestone(m*2-1), canSuper: (canSuperCharge()||hasSuperMilestone(m*2-1))&&hasMilestone(m*2-1), unlocked: hasMilestone(m*2-1), locked: !hasMilestone(m*2-1)}" v-bind:tooltip="MILESTONES[m*2-1].tooltip?MILESTONES[m*2-1].tooltip():false" v-bind:style="{'font-size': MILESTONES[m*2-1].smalltxt?'14px':'16px'}" v-on:click="superCharge(m*2-1)"><b>{{MILESTONES[m*2-1].reqDesc}} {{hasSuperMilestone(m*2-1)?"(SUPERCHARGED)":hasMilestone(m*2-1)?"(COMPLETE)":"(INCOMPLETE)"}}</b><br><br>Reward: {{hasSuperMilestone(m*2-1)?checkFunc(MILESTONES[m*2-1].sup):MILESTONES[m*2-1].reward}}</td>
+						<td v-if="MILESTONES[m*2]" v-bind:class="{milestone: true, supercharger_btn: hasSuperMilestone(m*2), canSuper: (canSuperCharge()||hasSuperMilestone(m*2))&&hasMilestone(m*2), unlocked: hasMilestone(m*2), locked: !hasMilestone(m*2)}" v-bind:tooltip="MILESTONES[m*2].tooltip?MILESTONES[m*2].tooltip():false" v-bind:style="{'font-size': MILESTONES[m*2].smalltxt?'14px':'16px'}" v-on:click="superCharge(m*2)"><b>{{MILESTONES[m*2].reqDesc}} {{hasSuperMilestone(m*2)?"(SUPERCHARGED)":hasMilestone(m*2)?"(COMPLETE)":"(INCOMPLETE)"}}</b><br><br>Reward: {{hasSuperMilestone(m*2)?checkFunc(MILESTONES[m*2].sup):MILESTONES[m*2].reward}}</td>
+					</tr>
+				</table>
+			</div>
+			<div v-if="tab=='Supercharger'">
+				<br><br>You have <span class="supercharger_txt" style="font-size: 30px; font-weight: bold;">{{formatWhole(player.supercharger.amt.plus(hasMilestone(8)?player.supercharger.amt2:0).plus(hasSuperMilestone(8)?player.supercharger.amt3:0))}}</span> Super Charge<br>
+				<span class="supercharger_txt" style="font-size: 30px; font-weight: bold;">{{format(tmp.sup)}}</span>x Global Automator Speed<span v-if="hasSuperMilestone(9)"> & Resource gain</span><br><br><br><br>
+				<table>
+					<tr>
+						<td><div style="display: flex; flex-flow: row nowrap;">
+							<div class="steel_bg" style="filter: brightness(25%); height: 125px; box-sizing: border-box; width: 400px; flex: none; z-index: 0;"></div>
+							<div class="noTransition" style="height: 100px; margin-top: 12.5px; width: 400px; box-sizing: border-box; width: 100%; flex: none; margin-left: -350px; z-index: 10;">
+								<span class="steel_txt" style="font-size: 30px; font-weight: bold;">{{player.materials[0]?formatWhole(player.materials[0].amt):"0"}}</span><br>
+								<hr style="width: 100px; border: 1px solid white; margin-top: 18px; margin-bottom: 0px;"><br>
+								Req <span class="supercharger_txt" style="font-size: 30px; font-weight: bold;">{{format(getNextSupercharged(1))}}</span> Steel
+							</div>
+						</div></td>
+						<td v-if="hasMilestone(8)" style="margin-left: 120px;"><div style="display: flex; flex-flow: row nowrap;">
+							<div class="steel_bg" style="filter: brightness(25%); height: 125px; box-sizing: border-box; width: 400px; flex: none; z-index: 0;"></div>
+							<div class="noTransition" style="height: 100px; margin-top: 12.5px; width: 400px; box-sizing: border-box; width: 100%; flex: none; margin-left: -380px; z-index: 10;">
+								<span class="steel_txt" style="font-size: 30px; font-weight: bold;">{{player.materials[0]?(player.materials[0].autoData[0]?formatWhole(player.materials[0].autoData[0]):"0"):"0"}}</span><br>
+								<hr style="width: 100px; border: 1px solid white; margin-top: 18px; margin-bottom: 0px;"><br>
+								Req <span class="supercharger_txt" style="font-size: 30px; font-weight: bold;">{{format(getNextSupercharged(2))}}</span> of Steel's A1
+							</div>
+						</div></td>
+						<td v-if="hasSuperMilestone(8)" style="margin-left: 55px;"><div style="display: flex; flex-flow: row nowrap;">
+							<div class="gold_bg" style="filter: brightness(25%); height: 125px; box-sizing: border-box; width: 400px; flex: none; z-index: 0; border: 3px solid #f7e0a1;"></div>
+							<div class="noTransition" style="height: 100px; margin-top: 12.5px; width: 400px; box-sizing: border-box; width: 100%; flex: none; margin-left: -350px; z-index: 10;">
+								<span class="gold_txt" style="font-size: 30px; font-weight: bold;">{{player.materials[1]?formatWhole(player.materials[1].amt):"0"}}</span><br>
+								<hr style="width: 100px; border: 1px solid white; margin-top: 18px; margin-bottom: 0px;"><br>
+								Req <span class="supercharger_txt" style="font-size: 30px; font-weight: bold;">{{format(getNextSupercharged(3))}}</span> Gold
+							</div>
+						</div></td>
+					</tr>
+				</table><br><br><br><br>
+				<div v-if="hasMilestone(9)">
+					You have <span class="supercharger_txt" style="font-size: 30px; font-weight: bold;">{{formatWhole(player.supercharger.batteries)}}</span> Super Batteries, which are increasing Super Charge gain by <span class="supercharger_txt" style="font-size: 30px; font-weight: bold;">{{format(tmp.sbe.sub(1).times(100))}}%</span><br><br>
+					Your Super Energy is generating <span class="supercharger_txt" style="font-size: 30px; font-weight: bold;">{{formatWhole(tmp.sbg)}}</span> Super Batteries/sec.<br><br>
+					<table>
+						<tr style="display: flex;">
+							<td><button v-bind:class="{options: true, supercharger_btn: player.supercharger.batteries.gte(getSBUpgCost(1)), big: true, unlocked: player.supercharger.batteries.gte(getSBUpgCost(1)), locked: player.supercharger.batteries.lt(getSBUpgCost(1))}" onclick="buySBUpg(1)"><b>Multiply Super Battery gain by {{formatWhether(tmp.sbue2.plus(4).times(tmp.sbueMult))}}</b><br>Currently: {{formatWhether(tmp.sbue)}}x<br><br>Cost: {{formatWhole(getSBUpgCost(1))}} Super Batteries</button></td>
+							<td v-if="hasSuperMilestone(10)"><button v-bind:class="{options: true, supercharger_btn: player.supercharger.batteries.gte(getSBUpgCost(2)), big: true, unlocked: player.supercharger.batteries.gte(getSBUpgCost(2)), locked: player.supercharger.batteries.lt(getSBUpgCost(2))}" onclick="buySBUpg(2)"><b>Add to the previous upgrade mult by {{formatWhether(tmp.sbue3.plus(1.5).times(tmp.sbueMult))}}</b><br>Currently: +{{format(tmp.sbue2)}}<br><br>Cost: {{formatWhole(getSBUpgCost(2))}} Super Batteries</button></td>
+							<td v-if="hasSuperMilestone(13)"><button v-bind:class="{options: true, supercharger_btn: player.supercharger.batteries.gte(getSBUpgCost(3)), big: true, unlocked: player.supercharger.batteries.gte(getSBUpgCost(3)), locked: player.supercharger.batteries.lt(getSBUpgCost(3))}" onclick="buySBUpg(3)"><b>Add to both previous upgrade mults by {{formatWhether(tmp.sbueMult.div(4))}}</b><br>Currently: +{{format(tmp.sbue3)}}<br><br>Cost: {{formatWhole(getSBUpgCost(3))}} Super Batteries</button></td>
+						</tr>
+						<tr v-for="(x,i) in tmp.sbuad" style="display: flex;" v-if="hasMilestone(14)">
+							<td v-if="x!='...'"><button style="width: 175px;" v-bind:class="{options: true, supercharger_btn: (x.eq(1)?player.supercharger.batteries:(player.supercharger.auto[(tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?(i-2):(i-1)])).gte(getSBAutoCost(1, i)), unlocked: (x.eq(1)?player.supercharger.batteries:(player.supercharger.auto[(tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?(i-2):(i-1)])).gte(getSBAutoCost(1, i)), locked: (x.eq(1)?player.supercharger.batteries:(player.supercharger.auto[(tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?(i-2):(i-1)])).lt(getSBAutoCost(1, i))}" v-on:click="buySBAuto(1, i)"><b>S1<sub>A{{formatWhole(x)}}</sub>: {{formatWhole(player.supercharger.auto[i]||0)}}</b><br><br>Cost: {{formatWhole(getSBAutoCost(1, i))}} <span v-html="(x.eq(1)?'Super Batteries':('S1<sub>A'+formatWhole((tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?tmp.sbuad[i-2]:tmp.sbuad[i-1])+'</sub>'))"></span></button></td>
+							<td v-if="x!='...' && hasSuperMilestone(10)"><button style="width: 175px;" v-bind:class="{options: true, supercharger_btn: (x.eq(1)?player.supercharger.batteries:(player.supercharger.auto2[(tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?(i-2):(i-1)])).gte(getSBAutoCost(2, i)), unlocked: (x.eq(1)?player.supercharger.batteries:(player.supercharger.auto2[(tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?(i-2):(i-1)])).gte(getSBAutoCost(2, i)), locked: (x.eq(1)?player.supercharger.batteries:(player.supercharger.auto2[(tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?(i-2):(i-1)])).lt(getSBAutoCost(2, i))}" v-on:click="buySBAuto(2, i)"><b>S2<sub>A{{formatWhole(x)}}</sub>: {{formatWhole(player.supercharger.auto2[i]||0)}}</b><br><br>Cost: {{formatWhole(getSBAutoCost(2, i))}} <span v-html="(x.eq(1)?'Super Batteries':('S2<sub>A'+formatWhole((tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?tmp.sbuad[i-2]:tmp.sbuad[i-1])+'</sub>'))"></span></button></td>
+							<td v-if="x!='...' && hasSuperMilestone(13)"><button style="width: 175px;" v-bind:class="{options: true, supercharger_btn: (x.eq(1)?player.supercharger.batteries:(player.supercharger.auto3[(tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?(i-2):(i-1)])).gte(getSBAutoCost(3, i)), unlocked: (x.eq(1)?player.supercharger.batteries:(player.supercharger.auto3[(tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?(i-2):(i-1)])).gte(getSBAutoCost(3, i)), locked: (x.eq(1)?player.supercharger.batteries:(player.supercharger.auto3[(tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?(i-2):(i-1)])).lt(getSBAutoCost(3, i))}" v-on:click="buySBAuto(3, i)"><b>S3<sub>A{{formatWhole(x)}}</sub>: {{formatWhole(player.supercharger.auto3[i]||0)}}</b><br><br>Cost: {{formatWhole(getSBAutoCost(3, i))}} <span v-html="(x.eq(1)?'Super Batteries':('S3<sub>A'+formatWhole((tmp.sbuad[i-1]=='...'||!tmp.sbuad[i-1])?tmp.sbuad[i-2]:tmp.sbuad[i-1])+'</sub>'))"></span></button></td>
+						</tr>
+					</table>
+				</div><br>
+			</div>
+			<div v-if="tab=='Radioactivity'">	
+				<br><br>
+				You have <span style="font-size: 30px; font-weight: bold;" class="radioactivity_txt">{{formatWhole(player.radioactivity.ionCores)}}</span> Ionic Cores<span v-if="player.radioactivity.ionCores.gte(1)">, which produce Ions<span v-if="player.radioactivity.ionCores.gte(2)"> & improve Ionic Boost strength by <span style="font-size: 25px; font-weight: bold;" class="radioactivity_txt">+{{format(tmp.ionCoreEff.sub(1).times(100))}}%</span></span></span><br><br>
+				<button v-bind:class="{options: true, radioactivity_btn: player.supercharger.batteries.gte(tmp.radResetReq), big: true, unlocked: player.supercharger.batteries.gte(tmp.radResetReq), locked: player.supercharger.batteries.lt(tmp.radResetReq)}" style="font-weight: bold;" onclick="ionCoreReset()">Reset all Supercharger progress to gain an Ion Core<br><br>Req: {{format(tmp.radResetReq)}} Super Batteries</button>
+				<div v-if="player.radioactivity.ionCores.gte(1)"><br><br><br>You have <span style="font-size: 30px; font-weight: bold;" class="radioactivity_txt">{{formatWhole(player.radioactivity.ions.floor())}}</span> Ions<br>({{format(tmp.radc.times(100))}}% chance/sec per OoM of Steel after {{formatWhole(tmp.radst)}})<br><br><br>
+				<span style="font-size: 20px; font-weight: bold;" class="radioactivity_txt">Ionic Boost I</span>: "Each Automator gets a multiplier based on its amount (log10(x)+1)" is raised <span style="font-size: 30px; font-weight: bold;" class="radioactivity_txt">^{{format(tmp.ionEff)}}</span><br>
+				<span style="font-size: 20px; font-weight: bold;" class="radioactivity_txt">Ionic Boost II</span>: The Base Super Charge effect is raised <span style="font-size: 30px; font-weight: bold;" class="radioactivity_txt">^{{format(tmp.ionEff2)}}</span><br>
+				<span style="font-size: 20px; font-weight: bold;" class="radioactivity_txt">Ionic Boost III</span>: Multiply Super Battery gain by <span style="font-size: 30px; font-weight: bold;" class="radioactivity_txt">{{format(tmp.ionEff3)}}x</span><br>
+				<span v-if="player.radioactivity.ionCores.gte(6)"><span style="font-size: 20px; font-weight: bold;" class="radioactivity_txt">Ionic Boost IV</span>: All Super Battery Upgrade effects are multiplied by <span style="font-size: 30px; font-weight: bold;" class="radioactivity_txt">{{format(tmp.ionEff4)}}x</span></span><br>
+				<span v-if="player.radioactivity.ionCores.gte(11)"><span style="font-size: 20px; font-weight: bold;" class="radioactivity_txt">Ionic Boost V</span>: All Material effects are multiplied by their amount <span style="font-size: 30px; font-weight: bold;" class="radioactivity_txt">^{{format(tmp.ionEff5)}}</span></span><br>
+				<span v-if="player.radioactivity.ionCores.gte(27)"><span style="font-size: 20px; font-weight: bold;" class="radioactivity_txt">Ionic Boost VI</span>: Automator costs in later Materials increase <span style="font-size: 30px; font-weight: bold;" class="radioactivity_txt">{{format(tmp.ionEff6.times(100))}}%</span> slower</span><br><br>
+				<span v-if="player.radioactivity.ionCores.lt(6)">Next Ionic Boost: 6 Ionic Cores</span><span v-if="player.radioactivity.ionCores.gte(6) && player.radioactivity.ionCores.lt(11)">Next Ionic Boost: 11 Ionic Cores</span><span v-if="player.radioactivity.ionCores.gte(11) && player.radioactivity.ionCores.lt(27) && player.eclipse.times.gte(1)">Next Ionic Boost: 27 Ionic Cores</span>
+				</div>
+			</div>
+			<div v-if="tab=='Main'" style="width: 100%;">
+				<table style="width: 100%;">
+					<tr style="width: 100%;">
+						<td v-if="tabData.materialTabs.length>1" style="position: absolute; left: 0; width: 140px; padding-bottom: 20px; background-color: #43424f; border: 3px solid #acacac;">
+							<br>
+							<table style="margin-left: 10px; width: 120px; margin-right: 10px;">
+								<tr v-for="t in tabData.materialTabs">
+									<td v-if="t!='...'"><button v-bind:class="{tab: true, unlocked: true, [t.toLowerCase()+'_btn']: true}" v-on:click="subtab = t; updateTemp();" v-bind:style="{ 'font-weight': 'bold', width: '120px', color: 'white', [earlyMaterial(t.toLowerCase())?'???':'background-color']: matColFromTitle(t, .8), [earlyMaterial(t)?'????':'border-color']: matColFromTitle(t, .5) }">{{t}}</button></td>
+									<td v-else><br>...<br><br></td>
+								</tr>
+							</table>
+						</td>
+						<td style="width: 18%; padding: 0; margin-top: 20px; border-radius: 15%; float: left;" v-bind:style="{'background-color': ((player.materials[tmp.mti].autosUnl.gte(3)||hasMilestone(1))?'#436163':'transparent'), border: ((player.materials[tmp.mti].autosUnl.gte(3)||hasMilestone(1))?'10px solid #ababab':'none'), 'margin-left': (tabData.materialTabs.length>1?'10%':'0%')}">
+							<br><br>
+							<div v-if="player.materials[tmp.mti].autosUnl.gte(3)||hasMilestone(1)">
+								<h2>UPGRADES</h2><br><br>
+								<table>
+									<tr v-for="r in UPGS.rows">
+										<td v-for="c in UPGS.cols" v-if="UPGS[r*10+c]!==undefined && (UPGS[r*10+c].unlocked()||(r<=7&&hasMilestone(1))||hasSuperMilestone(1)) && player.materials[tmp.mti]!==undefined && !UPGS[r*10+c].right && !UPGS[r*10+c].layered"><button v-bind:class="{options: true, [getMaterialName(tmp.mti).toLowerCase()+'_btn']: (player.materials[tmp.mti].amt.gte(checkFunc(UPGS[r*10+c].cost))&&!player.materials[tmp.mti].upgs.includes(r*10+c)), wide: (UPGS[r*10+c].type=='wide'), unlocked: (player.materials[tmp.mti].amt.gte(UPGS[r*10+c].cost)&&!player.materials[tmp.mti].upgs.includes(r*10+c)), locked: (player.materials[tmp.mti].amt.lt(UPGS[r*10+c].cost)&&!player.materials[tmp.mti].upgs.includes(r*10+c)), bought: player.materials[tmp.mti].upgs.includes(r*10+c)}" v-on:click="buyUpg(r*10+c, tmp.mti)" v-bind:tooltip="UPGS[r*10+c].tooltip?UPGS[r*10+c].tooltip():false" v-bind:style="{'font-size': (UPGS[r*10+c].type=='smalltxt'?'10px':'13px') }">{{checkFunc(UPGS[r*10+c].desc)}}<span v-if="!player.materials[tmp.mti].upgs.includes(r*10+c)"><br><br><span v-if="UPGS[r*10+c].cost.lt(1e6)">Cost: </span>{{formatWhole(UPGS[r*10+c].cost)}} {{tmp.mta}}</span></button></td>
+									</tr>
+								</table><br><br><br>
+							</div>
+						</td><td style="width: 40%; padding: 0;">
+							<br><br><h3>You have <span v-bind:class="{[tmp.mta.toLowerCase()+'_txt']: true}" v-bind:style="{ 'font-size': '50px', [tmp.mtd[tmp.mti].gte(14)?'color':'???']: getMaterialColor(tmp.mtd[tmp.mti]) }">{{formatWhole(player.materials[tmp.mti].amt)}}</span> {{tmp.mta}}</h3><span v-if="tmp.mti>0"><span v-bind:class="{[getMaterialName(tmp.mti, -1).toLowerCase()+'_txt']: true}" v-bind:style="{ 'font-size': '25px', 'font-weight': 'bold', [tmp.mtd[tmp.mti].gte(14)?'color':'???']: getMaterialColor(tmp.mtd[tmp.mti-1]||new Decimal(1)) }">{{format(tmp.mmm[tmp.mti])}}</span>x {{getMaterialName(tmp.mti, -1)}} gain {{player.radioactivity.ionCores.gte(11)?"(":""}}(log2(x){{hasUpg(16, tmp.mti)?('^^'+format(tmp.tet[tmp.mti])):''}}){{player.radioactivity.ionCores.gte(11)?("*x^"+format(tmp.ionEff5)+")"):""}}</span><br><br>
+							<button id="screwIMGContainer" style="background-color: transparent; border: none;" v-on:click="player.materials[tmp.mti].amt = player.materials[tmp.mti].amt.plus(tmp.mg[tmp.mti]);">
+								<img id="screwIMG" v-bind:src="(MATERIALS[tmp.mta.toLowerCase()]&&earlyMaterial(tmp.mta))?MATERIALS[tmp.mta.toLowerCase()].img:'images/m_x.png'" width="100px" height="100px"></img>
+							</button>
+							<span v-if="tmp.mg[tmp.mti].gt(1)" style="font-size: 12px;"><br>{{formatWhole(tmp.mg[tmp.mti])}}x</span>
+							<br><br><br>
+							<table v-if="tmp.aud[tmp.mti].length>0">
+								<tr v-for="(n,i) in tmp.aud[tmp.mti]" style="display: flex;">
+									<td v-if="n!='...'" v-bind:style="{ width: '400px', height: '50px', color: 'white', [earlyMaterial(tmp.mta)?'???':'background-color']: getMaterialColor(tmp.mtd[tmp.mti], .5) }" v-bind:class="{atm: true, [tmp.mta.toLowerCase()+'_atm']: true, 'steel_atm': (tmp.mti==0||(tmp.mta==('M'+formatWhole(tmp.mtd[tmp.mti]))))}"><span style="float:left; margin-left: 25px;" v-bind:style="{'margin-top': (tmp.aum[tmp.mti][i].gt(1)?'10px':'15px')}"><b>A{{formatWhole(n)}}: {{formatWhole(getAutoAmt(n, tmp.mti))}}</b><span v-if="tmp.aum[tmp.mti][i].gt(1)" style="font-size: 10px;"><br>{{format(tmp.aum[tmp.mti][i])}}x</span></span><span class="noTransition" style="float: right; margin-right: 25px; margin-top: 5px;" v-bind:style="{visibility: player.materials[tmp.mti].autosUnl.gt(n)?'visible':'hidden'}"><button class="small unlocked" style="width: 40px; height: 40px;" v-on:click="player.materials[tmp.mti].autoSel[i] = !player.materials[tmp.mti].autoSel[i];">{{player.materials[tmp.mti].autoSel[i]?"ON":"OFF"}}</button></span><span style="float: right; margin-left: 25px; margin-right: 15px;"><button v-bind:class="{small: true, unlocked: (n.gt(1)?getAutoAmt(tmp.aup[tmp.mti][i], tmp.mti):player.materials[tmp.mti].amt).gte(getAutomatorCost(getAutoAmt(n, tmp.mti), n.sub(tmp.aup[tmp.mti][i]), n, tmp.mti)), locked: (n.gt(1)?getAutoAmt(tmp.aup[tmp.mti][i], tmp.mti):player.materials[tmp.mti].amt).lt(getAutomatorCost(getAutoAmt(n, tmp.mti), n.sub(tmp.aup[tmp.mti][i]), n, tmp.mti))}" style="height: 45px; width: 100px; margin-top: 2.5px; border-radius: 20%; font-size: 12px;" v-on:click="buyAuto(n, tmp.mti)"><span v-if="getAutomatorCost(getAutoAmt(n, tmp.mti), n.sub(tmp.aup[tmp.mti][i]), n, tmp.mti).lt(1e6)">Cost: </span>{{formatWhole(getAutomatorCost(getAutoAmt(n, tmp.mti), n.sub(tmp.aup[tmp.mti][i]), n, tmp.mti))}} {{n.gt(1)?("A"+formatWhole(tmp.aup[tmp.mti][i])):getMaterialName(tmp.mti)}}</button></span></td>
+									<td v-else><br>...<br><br></td>
+								</tr>
+							</table>
+						</td><td style="width: 18%; padding: 0; margin-top: 20px; border-radius: 15%; float: right;" v-bind:style="{'background-color': ((player.materials[tmp.mti].autosUnl.gte(5)||tmp.mtd[tmp.mti].gt(0))?'#664551':'transparent'), border: ((player.materials[tmp.mti].autosUnl.gte(5)||tmp.mtd[tmp.mti].gt(0))?'10px solid #ababab':'none')}">
+							<br><br>
+							<div v-if="player.materials[tmp.mti].autosUnl.gte(5)||tmp.mtd[tmp.mti].gt(0)">
+								<h2>UPGRADES</h2><br><br>
+								<table>
+									<tr v-for="r in UPGS.rows">
+										<td v-for="c in UPGS.cols" v-if="UPGS[r*10+c]!==undefined && (UPGS[r*10+c].unlocked()||(r<=7&&hasMilestone(1))||hasSuperMilestone(1)) && player.materials[tmp.mti]!==undefined && (tmp.mtd[tmp.mti].gt(0)?UPGS[r*10+c].layered:UPGS[r*10+c].right)"><button v-bind:class="{options: true, [getMaterialName(tmp.mti).toLowerCase()+'_btn']: (player.materials[tmp.mti].amt.gte(checkFunc(UPGS[r*10+c].cost))&&!player.materials[tmp.mti].upgs.includes(r*10+c)), wide: (UPGS[r*10+c].type=='wide'), unlocked: (player.materials[tmp.mti].amt.gte(checkFunc(UPGS[r*10+c].cost))&&!player.materials[tmp.mti].upgs.includes(r*10+c)), locked: (player.materials[tmp.mti].amt.lt(checkFunc(UPGS[r*10+c].cost))&&!player.materials[tmp.mti].upgs.includes(r*10+c)), bought: player.materials[tmp.mti].upgs.includes(r*10+c)}" v-on:click="buyUpg(r*10+c, tmp.mti)" v-bind:tooltip="UPGS[r*10+c].tooltip?UPGS[r*10+c].tooltip():false" v-bind:style="{'font-size': ((UPGS[r*10+c].type=='smalltxt'||UPGS[r*10+c].smalltxt)?'10px':'13px')}">{{checkFunc(UPGS[r*10+c].desc)}}<span v-if="!player.materials[tmp.mti].upgs.includes(r*10+c)"><br><br><span v-if="checkFunc(UPGS[r*10+c].cost).lt(1e6)">Cost: </span>{{formatWhole(checkFunc(UPGS[r*10+c].cost))}} {{getMaterialName(tmp.mti)}}</span></button></td>
+									</tr>
+								</table><br><br><br>
+							</div>
+						</td>
+					</tr>
+				</table><br><br>
+			</div>
+			<div v-if="tab=='Eclipse'">
+				<br><br><button v-bind:class="{options: true, eclipse_btn: (player.materials[0]?player.materials[0].amt.gte(ECLIPSE_REQ):false), big: true, unlocked: (player.materials[0]?player.materials[0].amt.gte(ECLIPSE_REQ):false), locked: (player.materials[0]?player.materials[0].amt.lt(ECLIPSE_REQ):true)}" style="font-weight: bold;" onclick="eclipseReset()">Reset all previous progress to increase the Eclipsal Lifespan by {{formatTime(tmp.ec.gain)}}<span v-if="tmp.ec.gain.lt(1)"><br><br>Req: {{format(ECLIPSE_REQ)}} Steel</span></button><br><br>
+				<div v-if="player.eclipse.times.gt(0)">
+					Eclipsal Speed: <b style="font-size: 30px;" class="eclipse_txt">{{format(tmp.ec.speed)}}x</b><br><br>
+					Eclipsal Lifespan: <b style="font-size: 30px;" class="eclipse_txt">{{formatTime(player.eclipse.lifespan)}}</b><br><br><br>
+					You have <b style="font-size: 30px;" class="eclipse_txt">{{format(player.eclipse.power)}}</b> Eclipsal Power, which<br><span tooltip="(EclipsalPower+1) ^ (8+2*Milestones)">makes Milestones multiply Automator speed by <b style="font-size: 30px;" class="eclipse_txt">{{format(tmp.ec.powerEff)}}</b>,</span><br><span v-bind:tooltip="'10^cbrt(log(Steel) * '+(player.eclipse.power.gte(1.5e6)?'log2(EclipsalPower) ^ 5':'EclipsalPower')+')'">makes Steel multiply Material gain by <b style="font-size: 30px;" class="eclipse_txt">{{format(tmp.ec.powerEff2)}}</b>,</span><br><span v-bind:tooltip="tmp.ec.powerEff3.gte(1e4)?'10^sqrt(log( (EclipsalPower+1)^3 ))':'(EclipsalPower+1)^3'">and multiplies Super Battery gain & Ion chance by <b style="font-size: 30px;" class="eclipse_txt">{{format(tmp.ec.powerEff3)}}</b></span>
+				</div>
+			</div>
+			<div v-if="tab=='Apparatus'">
+				<br><br>
+				You have <b style="font-size: 30px;" class="apparatus_txt">{{formatWhole(player.apparatus.unused)}}</b> Unused Contraptions.<br><br><br><br>
+				<table style="width: 100vw; height: 100vh; display: table;">
+					<tr style="display: table-row;">
+						<td style="width: 25vw; vertical-align: top;"><h2>Machines: {{formatWhole(player.apparatus.rowsUnl)}}</h2><button style="width: 30px; height: 30px; font-size: 20px;" v-bind:class="{ unlocked: player.apparatus.unused.gt(0)&&player.apparatus.rowsUnl.toNumber()<Object.keys(apparatus_row_data).length, locked: player.apparatus.unused.lte(0)||player.apparatus.rowsUnl.toNumber()>=Object.keys(apparatus_row_data).length }" onclick="adjustApparatus('rowsUnl', 1)"><b>+</b></button><button style="width: 30px; height: 30px; font-size: 20px;" v-bind:class="{ unlocked: player.apparatus.rowsUnl.gte(1), locked: player.apparatus.rowsUnl.lt(1) }" onclick="adjustApparatus('rowsUnl', -1)"><b>-</b></button></td>
+						<td style="width: 100vw;">
+							<table style="width: 100%; display: table; flex-flow: row wrap;">
+								<tr v-for="r in Math.min(player.apparatus.rowsUnl.toNumber(), Object.keys(apparatus_row_data).length)" style="display: inline-flex; flex-flow: column wrap;">
+									<td v-for="data in (apparatus_row_data[r]||[])" style="background-color: black; text-align: center; width: 150px; height: 150px; border: 1px solid white; margin-bottom: 10px; margin-left: 40px; margin-right: 40px;">
+										<b v-html="data.title"></b><br><br>
+										Interval: {{formatTime(data.time.div(tmp.app.spd))}}
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td style="width: 25vw; vertical-align: top;"><h2>Speed: {{format(tmp.app.spd)}}x</h2><button style="width: 30px; height: 30px; font-size: 20px;" v-bind:class="{ unlocked: player.apparatus.unused.gt(0), locked: player.apparatus.unused.lte(0) }" onclick="adjustApparatus('speedUpgs', 1)"><b>+</b></button><button style="width: 30px; height: 30px; font-size: 20px;" v-bind:class="{ unlocked: player.apparatus.speedUpgs.gte(1), locked: player.apparatus.speedUpgs.lt(1) }" onclick="adjustApparatus('speedUpgs', -1)"><b>-</b></button></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
