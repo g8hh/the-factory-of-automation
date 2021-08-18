@@ -1,0 +1,1111 @@
+* {
+	font-family: Courier;
+	text-align: center;
+	transition-duration: 0.5s;
+	user-select: none;
+}
+
+html {
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	color: white;
+	text-shadow: 0px 0px 6px white;
+	overflow-x: hidden;
+	background-color: black;
+}
+
+table, tr, .table {
+    display: inline-flex;
+    justify-content: center;
+}
+
+table {
+	flex-flow: column wrap;
+}
+
+tr, .tableRow {
+    flex-flow: row wrap;
+}
+
+.band {
+	width: 100%;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: center;
+}
+
+button {
+	border: solid 3px white;
+	border-radius: 25%;
+	background-color: white;
+    font-size: 14px;
+	cursor: default;
+	height: 100px;
+}
+
+button:not(.tab) {
+	width: 100px;
+}
+
+button.small {
+	width: 80px;
+	height: 40px;
+}
+
+button.big {
+	width: 175px !important;
+	height: 175px !important;
+}
+
+button.wide {
+	width: 200px;
+}
+
+button.tab {
+	height: 40px;
+	border-radius: 0px;
+}
+
+button.unlocked:hover {
+	filter: sepia(150%);
+	filter: brightness(80%);
+	cursor: pointer;
+}
+
+button.options, button.options_btn {
+	border-radius: 10%;
+	background-color: #8a8a8a;
+	color: white;
+	border: solid 4px grey;
+	min-width: 80px;
+}
+
+button.milestones_btn {
+	border-radius: 10%;
+	background-color: #0a0052;
+	color: white;
+	width: 100px;
+	border: solid 3px #1700bd;
+}
+
+button.milestones_btn:hover {
+	filter: brightness(150%);
+}
+
+button.supercharger_btn {
+	border-radius: 10%;
+	background-color: #eb9400;
+	color: white;
+	width: 120px;
+	border: solid 3px #bd4f00;
+	animation: supercharger 20s ease infinite;
+}
+
+button.supercharger_btn:hover {
+	filter: brightness(150%);
+}
+
+button.radioactivity_btn {
+	border-radius: 10%;
+	background-color: #66ff00;
+	color: #111111;
+	text-shadow: 0px 0px 6px #ff0000, 0px 0px 12px #fffb00;
+	min-width: 130px;
+	border: solid 3px #4cbf00;
+	font-weight: 900;
+	animation: radioactivity 8s ease infinite;
+}
+
+button.radioactivity_btn:hover {
+	font-size: 14.5px;
+}
+
+.radioactivity_txt {
+	background-color: #66ff00;
+	text-shadow: 0px 0px 6px #ff0000, 0px 0px 12px #fffb00;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+	animation: radioactivity 6s ease infinite;
+}
+
+.radioactivity_bg {
+	background-color: #0d2100;
+	animation: radioactivity 10s ease infinite;
+}
+
+button.eclipse_btn {
+	border-radius: 5%;
+	background-color: #866336;
+	color: #000000;
+	text-shadow: 0px 0px 6px #fffb00, 0px 0px 12px #ff0000;
+	min-width: 130px;
+	border: solid 3px #bf7300;
+	font-weight: bold;
+	animation: eclipse 8s ease infinite;
+}
+
+button.eclipse_btn:hover {
+	transform: scale(1.2, 1.2);
+}
+
+.eclipse_txt {
+	background-color: #975607;
+	text-shadow: 0px 0px 2px #fffb00, 0px 0px 8px #ff0000;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+	animation: eclipse 10s ease infinite;
+	animation-direction: backwards;
+}
+
+.eclipse_bg {
+	background-color: #211000;
+	animation: eclipse 10s ease infinite;
+}
+
+button.apparatus_btn {
+	border-radius: 5%;
+	background-color: #48574b;
+	color: white;
+	width: 100px;
+	border: solid 4px #8db88f;
+}
+
+button.apparatus_btn:hover {
+	filter: brightness(150%);
+}
+
+.apparatus_bg {
+	background-color: #354136;
+}
+
+.apparatus_txt {
+	color: #9bcea1;
+	text-shadow: 0px 0px 7px #0cd123;
+}
+
+button.main_btn {
+	border: solid 3px #b5b5b5;
+	border-radius: 10%;
+	background-color: #ededed;
+}
+
+.supercharger_txt {
+	background-color: #eb9400;
+	text-shadow: 0px 0px 7px #eb9400;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+	animation: supercharger_txt 12s ease infinite;
+}
+
+button.locked {
+	cursor: not-allowed;
+	background-color: red;
+	color: white;
+}
+
+button.bought {
+	cursor: default;
+	background-color: #49824d;
+	color: white;
+}
+
+.milestone {
+	width: 400px;
+	height: 100px;
+	margin: 5px 5px 5px 5px;
+	cursor: default;
+}
+
+.milestone.locked {
+	background-color: #730000;
+	color: white;
+	border: 4px	solid white;
+}
+
+.milestone.unlocked {
+	background-color: #0a0052;
+	color: white;
+	border: 4px solid #1700bd;
+}
+
+.milestone.canSuper:hover {
+	cursor: pointer;
+	filter: sepia(150%);
+	filter: brightness(80%);
+	transform: scale(1.1);
+}
+
+.milestone.supercharger_btn {
+	border-radius: 5px;
+	background-color: #eb9400;
+	color: white;
+	border: solid 3px #bd4f00;
+	animation: supercharger 20s ease infinite;
+}
+
+.atm {
+	border: 2px solid white;
+}
+
+.milestones_bg {
+	background-color: #0a0052;
+}
+
+.supercharger_bg {
+	background-color: #eb9400;
+	animation: supercharger 15s ease infinite;
+}
+
+#screwIMG:hover {
+	filter: sepia(150%);
+	filter: brightness(80%);
+	transform: scale(1.1);
+	cursor: pointer;
+}
+
+#screwIMG:active {
+	transition-duration: 0.2s;
+	filter: sepia(0%);
+	filter: brightness(100%);
+	transform: scale(1);
+	cursor: pointer;
+}
+
+#screwIMGContainer:focus {
+	outline: 0;
+}
+
+.btnlink {
+	display: inline-block;
+	text-decoration: none;
+	border: solid 3px white;
+	border-radius: 10%;
+	background-color: white;
+	color: black;
+    font-size: 14px;
+	font-weight: bold;
+	cursor: default;
+	width: 75px;
+	height: 35px;
+	font-size: 30px;
+}
+
+.btnlink:hover {
+	filter: sepia(150%);
+	filter: brightness(80%);
+	cursor: pointer;
+}
+
+.noTransition, .noTransition * {
+	transition-duration: 0s;
+}
+
+.steel_atm, .steel_bg {
+	border: 2px solid #ababab; 
+	background-color: grey;
+}
+
+.steel_btn {
+	background: radial-gradient(
+			ellipse farthest-corner at left bottom,
+			#fedb37 0%,
+			#fdb931 8%,
+			#9f7928 30%,
+			#8a6e2f 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right top,
+			#ffffff 0%,
+			#ffffac 8%,
+			#d1b464 25%,
+			#5d4a1f 62.5%,
+			#5d4a1f 100%
+		);
+	border-color: #f7e0a1;
+	color: white;
+	filter: grayscale(100%);
+}
+
+.steel_btn.unlocked:hover {
+	filter: grayscale(80%);
+}
+
+.steel_txt {
+	background: radial-gradient(
+			ellipse farthest-corner at right bottom,
+			#fedb37 0%,
+			#fdb931 8%,
+			#9f7928 30%,
+			#8a6e2f 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at left top,
+			#ffffff 0%,
+			#ffffac 8%,
+			#d1b464 25%,
+			#5d4a1f 62.5%,
+			#5d4a1f 100%
+		);
+	text-shadow: 0px 0px 8px #d1b464;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+	filter: grayscale(100%);
+}
+
+.gold_btn, .gold_atm, .gold_bg {
+	background: radial-gradient(
+			ellipse farthest-corner at left bottom,
+			#fedb37 0%,
+			#fdb931 8%,
+			#9f7928 30%,
+			#8a6e2f 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right top,
+			#ffffff 0%,
+			#ffffac 8%,
+			#d1b464 25%,
+			#5d4a1f 62.5%,
+			#5d4a1f 100%
+		);
+	border-color: #f7e0a1;
+	color: white;
+}
+
+.gold_txt {
+	background: radial-gradient(
+			ellipse farthest-corner at right bottom,
+			#fedb37 0%,
+			#fdb931 8%,
+			#9f7928 30%,
+			#8a6e2f 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at left top,
+			#ffffff 0%,
+			#ffffac 8%,
+			#d1b464 25%,
+			#5d4a1f 62.5%,
+			#5d4a1f 100%
+		);
+	text-shadow: 0px 0px 8px #d1b464;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.diamond_btn, .diamond_atm, .diamond_bg {
+	background: radial-gradient(
+			ellipse farthest-corner at left bottom,
+			#38ffeb 0%,
+			#31f5bd 8%,
+			#2aa38f 30%,
+			#308c88 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right top,
+			#ffffff 0%,
+			#acfcf7 8%,
+			#62d1bb 25%,
+			#1e5948 62.5%,
+			#1e5948 100%
+		);
+	border-color: #a1f7e3;
+	color: white;
+}
+
+.diamond_txt {
+	background: radial-gradient(
+			ellipse farthest-corner at right bottom,
+			#38ffeb 0%,
+			#31f5bd 8%,
+			#2aa38f 30%,
+			#308c88 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at left top,
+			#ffffff 0%,
+			#acfcf7 8%,
+			#62d1bb 25%,
+			#1e5948 62.5%,
+			#1e5948 100%
+		);
+	text-shadow: 0px 0px 8px #62d1bb;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.ruby_btn, .ruby_atm, .ruby_bg {
+	background: radial-gradient(
+			ellipse farthest-corner at left bottom,
+			#ff3838 0%,
+			#f56531 8%,
+			#a34e2a 30%,
+			#8c3030 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right top,
+			#ffffff 0%,
+			#fcacac 8%,
+			#d17e62 25%,
+			#59391e 62.5%,
+			#59391e 100%
+		);
+	border-color: #f7b1a1;
+	color: white;
+}
+
+.ruby_txt {
+	background: radial-gradient(
+			ellipse farthest-corner at left bottom,
+			#ff3838 0%,
+			#f56531 8%,
+			#a34e2a 30%,
+			#8c3030 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right top,
+			#ffffff 0%,
+			#fcacac 8%,
+			#d17e62 25%,
+			#59391e 62.5%,
+			#59391e 100%
+		);
+	text-shadow: 0px 0px 8px #d17e62;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.sapphire_btn.tab {
+	min-width: 85px;
+}
+
+.sapphire_btn, .sapphire_atm, .sapphire_bg {
+	background: radial-gradient(
+			ellipse farthest-corner at left bottom,
+			#4238ff 0%,
+			#3190f5 8%,
+			#2858a1 30%,
+			#2b3882 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right top,
+			#ffffff 0%,
+			#aeacfc 8%,
+			#618fd4 25%,
+			#1e3b57 62.5%,
+			#1e3b57 100%
+		);
+	border-color: #a39ff5;
+	color: white;
+}
+
+.sapphire_txt {
+	background: radial-gradient(
+			ellipse farthest-corner at left bottom,
+			#4238ff 0%,
+			#3190f5 8%,
+			#2858a1 30%,
+			#2b3882 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right top,
+			#ffffff 0%,
+			#aeacfc 8%,
+			#618fd4 25%,
+			#1e3b57 62.5%,
+			#1e3b57 100%
+		);
+	text-shadow: 0px 0px 8px #6298d1;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.emerald_btn, .emerald_atm, .emerald_bg {
+	background: radial-gradient(
+			ellipse farthest-corner at left top,
+			#38fc4b 0%,
+			#6ef72f 8%,
+			#69a327 30%,
+			#297d2d 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right bottom,
+			#ffffff 0%,
+			#bff7ab 8%,
+			#5fcf7b 25%,
+			#30541d 62.5%,
+			#30541d 100%
+		);
+	border-color: #a6f59f;
+	color: white;
+}
+
+.emerald_txt {
+	background: radial-gradient(
+			ellipse farthest-corner at left top,
+			#38fc4b 0%,
+			#6ef72f 8%,
+			#69a327 30%,
+			#297d2d 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right bottom,
+			#ffffff 0%,
+			#bff7ab 8%,
+			#5fcf7b 25%,
+			#30541d 62.5%,
+			#30541d 100%
+		);
+	text-shadow: 0px 0px 8px #7ecf61;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.alexandrite_btn.tab {
+	min-width: 115px;
+}
+
+.alexandrite_btn, .alexandrite_atm, .alexandrite_bg {
+	background: radial-gradient(
+			circle farthest-corner at left bottom,
+			#9a3bff 0%,
+			#582ffa 8%,
+			#292fa3 30%,
+			#2b6282 40%,
+			#2a8067 50%,
+			transparent 80%
+		),
+		radial-gradient(
+			circle farthest-corner at right top,
+			#ffffff 0%,
+			#affadd 8%,
+			#5dbccf 25%,
+			#2e1d54 62.5%,
+			#2e1d54 100%
+		);
+	border-color: #a2a1f7;
+	color: white;
+}
+
+.alexandrite_txt {
+	background: radial-gradient(
+			circle farthest-corner at left bottom,
+			#9a3bff 0%,
+			#582ffa 8%,
+			#292fa3 30%,
+			#2b6282 40%,
+			#2a8067 50%,
+			transparent 80%
+		),
+		radial-gradient(
+			circle farthest-corner at right top,
+			#ffffff 0%,
+			#affadd 8%,
+			#5dbccf 25%,
+			#2e1d54 62.5%,
+			#2e1d54 100%
+		);
+	text-shadow: 0px 0px 8px #6262d1;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.pearl_btn, .pearl_atm, .pearl_bg {
+	background: radial-gradient(
+			circle,
+			#8c6f8a 0%,
+			#60807d 8%,
+			#8a8a8a 30%,
+			#8c6f8a 40%,
+			#64706d 50%,
+			#8a8a8a 80%
+		);
+	border-color: #ffffff;
+	color: white;
+}
+
+.pearl_txt {
+	background: radial-gradient(
+			circle,
+			#8c6f8a 0%,
+			#60807d 8%,
+			#8a8a8a 30%,
+			#8c6f8a 40%,
+			#64706d 50%,
+			#8a8a8a 80%
+		);
+	text-shadow: 0px 0px 8px #c4c4c4;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.demantoid_btn.tab {
+	min-width: 100px;
+}
+
+.demantoid_btn, .demantoid_atm, .demantoid_bg {
+	background: radial-gradient(
+			circle farthest-corner at left top,
+			#38fc4b 0%,
+			#6ef72f 8%,
+			#69a327 30%,
+			#297d2d 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right bottom,
+			#ffffff 0%,
+			#bff7ab 8%,
+			#5fcf7b 25%,
+			#30541d 62.5%,
+			#30541d 100%
+		);
+	border-color: #9ff5ad;
+	color: white;
+	filter: sepia(50%);
+}
+
+.demantoid_btn.unlocked:hover {
+	filter: sepia(90%);
+}
+
+.demantoid_txt {
+	background: radial-gradient(
+			circle farthest-corner at left top,
+			#38fc4b 0%,
+			#6ef72f 8%,
+			#69a327 30%,
+			#297d2d 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right bottom,
+			#ffffff 0%,
+			#bff7ab 8%,
+			#5fcf7b 25%,
+			#30541d 62.5%,
+			#30541d 100%
+		);
+	text-shadow: 0px 0px 8px #83d466;
+	filter: sepia(50%);
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.tsavorite_btn, .tsavorite_atm, .tsavorite_bg {
+	background: radial-gradient(
+			circle farthest-corner at left top,
+			#297d2d 0%,
+			#69a327 8%,
+			#889e6d 30%,
+			#278f6c 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right bottom,
+			#30541d 0%,
+			#5fcf7b 8%,
+			#94b076 25%,
+			#000000 62.5%,
+			#000000 100%
+		);
+	border-color: #c5faa2;
+	color: white;
+	filter: saturate(125%);
+}
+
+.tsavorite_btn.unlocked:hover {
+	filter: saturate(75%);
+}
+
+.tsavorite_txt {
+	background: radial-gradient(
+			ellipse farthest-corner at left top,
+			#297d2d 0%,
+			#69a327 8%,
+			#889e6d 30%,
+			#278f6c 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			circle farthest-corner at right top,
+			#30541d 0%,
+			#5fcf7b 8%,
+			#94b076 25%,
+			#000000 62.5%,
+			#000000 100%
+		);
+	text-shadow: 0px 0px 8px #64d1a2;
+	filter: saturate(125%);
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.spinel_btn, .spinel_atm, .spinel_bg {
+	background: radial-gradient(
+			circle farthest-corner at left top,
+			#ff00e6 0%,
+			#ffb8f8 8%,
+			#db00c6 30%,
+			#700065 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at right bottom,
+			#700065 0%,
+			#f200da 8%,
+			#ff2eb9 25%,
+			#ffb0e5 62.5%,
+			#ffffff 100%
+		);
+	border-color: #ff0099;
+	color: white;
+}
+
+.spinel_txt {
+	background: radial-gradient(
+			ellipse farthest-corner at left top,
+			#ff00e6 0%,
+			#ffb8f8 8%,
+			#db00c6 30%,
+			#700065 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			circle farthest-corner at right top,
+			#700065 0%,
+			#f200da 8%,
+			#ff2eb9 25%,
+			#ffb0e5 62.5%,
+			#ffffff 100%
+		);
+	text-shadow: 0px 0px 8px #cf61aa;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.opal_btn, .opal_atm, .opal_bg {
+	background: radial-gradient(
+			circle,
+			#666666 0%,
+			#61413e 8%,
+			#015c59 30%,
+			#5d205e 40%,
+			#666666 80%
+		);
+	border-color: #ffffff;
+	color: white;
+}
+
+.opal_txt {
+	background: radial-gradient(
+			circle,
+			#666666 0%,
+			#61413e 8%,
+			#015c59 30%,
+			#5d205e 40%,
+			#666666 80%
+		);
+	text-shadow: 0px 0px 8px white;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.tanzanite_btn, .tanzanite_atm, .tanzanite_bg {
+	background: radial-gradient(
+			circle,
+			#7b00ff 0%,
+			#d3b8ff 8%,
+			#db00c6 30%,
+			#09006b 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse,
+			#09006b 0%,
+			#f500ed 8%,
+			#7a2df7 25%,
+			#deb3ff 62.5%,
+			#666666 100%
+		);
+	background-size: 90% 90%;
+	background-position: center;
+	border-color: #6a00ff;
+	color: white;
+}
+
+.tanzanite_txt {
+	background: radial-gradient(
+			circle,
+			#7b00ff 0%,
+			#d3b8ff 8%,
+			#db00c6 30%,
+			#09006b 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse,
+			#09006b 0%,
+			#f500ed 8%,
+			#7a2df7 25%,
+			#deb3ff 62.5%,
+			#666666 100%
+		);
+	background-size: 90% 90%;
+	background-position: center;
+	text-shadow: 0px 0px 8px #8c67d6;
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+}
+
+.aquamarine_btn.unlocked:hover {
+	filter: saturate(250%);
+}
+
+.aquamarine_txt {
+	background: radial-gradient(
+			circle farthest-corner at left top,
+			#38fff8 0%,
+			#2ff5b9 8%,
+			#25769c 30%,
+			#2d226e 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			circle farthest-corner at right bottom,
+			#ffffff 0%,
+			#affaf9 8%,
+			#5dabc7 25%,
+			#171d40 62.5%,
+			#171d40 100%
+		);
+	text-shadow: 0px 0px 8px #65b6d6;
+	filter: sepia(50%);
+	background-clip: text;
+	-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+	color: transparent;
+	filter: saturate(125%);
+}
+
+.aquamarine_btn, .aquamarine_atm, .aquamarine_bg {
+	background: radial-gradient(
+			circle farthest-corner at left top,
+			#38fff8 0%,
+			#2ff5b9 8%,
+			#25769c 30%,
+			#2d226e 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			circle farthest-corner at right bottom,
+			#ffffff 0%,
+			#affaf9 8%,
+			#5dabc7 25%,
+			#171d40 62.5%,
+			#171d40 100%
+		);
+	border-color: #9dd2f2;
+	color: white;
+	filter: saturate(125%);
+}
+
+.canvas {
+	top: 0;
+	left: 0;
+	position: absolute;
+	z-index: -1;
+}
+
+[tooltip] {
+	position: relative;
+	z-index: 999999 !important;
+}
+
+[tooltip]:before,
+[tooltip]:after {
+	visibility: hidden;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+	opacity: 0;
+	pointer-events: none;
+	white-space: pre-wrap;
+}
+
+[tooltip]:before {
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	margin-bottom: 5px;
+	margin-left: -80px;
+	padding: 7px;
+	width: 160px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background-color: black;
+	color: white;
+	content: attr(tooltip);
+	text-align: center;
+	font-size: 14px;
+	line-height: 1.2;
+	white-space: pre-wrap;
+}
+
+[tooltip]:after {
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -5px;
+	width: 0;
+	border-top: 5px solid black;
+	border-right: 5px solid transparent;
+	border-left: 5px solid transparent;
+	content: " ";
+	font-size: 0;
+	line-height: 0;
+	white-space: pre-wrap;
+}
+
+[tooltip]:hover:before,
+[tooltip]:hover:after {
+	animation: tooltip 0.25s linear 1;
+	animation-fill-mode: forwards;  
+	white-space: pre-wrap;
+}
+
+@keyframes tooltip {
+	0% {
+		-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+		filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+		opacity: 0;
+		visibility: hidden;
+	}
+	100% {
+		-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+		filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+@keyframes supercharger {
+	0% {
+		background-color: #523401;
+		border-color: #bd4f00;
+	}
+	25% {
+		background-color: #484a01;
+		border-color: #bfbc00;
+	}
+	75% {
+		background-color: #4a0101;
+		border-color: #bf0000;
+	}
+	100% {
+		background-color: #523401;
+		border-color: #bd4f00;
+	}
+}
+
+@keyframes supercharger_txt {
+	0% {
+		background-color: #eb9400;
+		text-shadow: 0px 0px 7px #eb9400;
+	}
+	25% {
+		background-color: #d5db00;
+		text-shadow: 0px 0px 7px #d5db00;
+	}
+	75% {
+		background-color: #f50000;
+		text-shadow: 0px 0px 7px #f50000;
+	}
+	100% {
+		background-color: #eb9400;
+		text-shadow: 0px 0px 7px #eb9400;
+	}
+}
+
+@keyframes radioactivity {
+	0% {
+		filter: brightness(100%);
+	}
+	25% {
+		filter: brightness(150%);
+	}
+	50% {
+		filter: brightness(125%);
+	}
+	75% {
+		filter: brightness(175%);
+	}
+	100% {
+		filter: brightness(100%);
+	}
+}
+
+@keyframes eclipse {
+	0% {
+		filter: brightness(100%);
+	}
+	25% {
+		filter: brightness(120%);
+	}
+	50% {
+		filter: brightness(200%);
+	}
+	75% {
+		filter: brightness(120%);
+	}
+	100% {
+		filter: brightness(100%);
+	}
+}
