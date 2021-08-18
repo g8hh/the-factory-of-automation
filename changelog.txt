@@ -1,0 +1,23 @@
+v0.3 - Eclipse (July 30 2021)
+
+1. Implemented Eclipse & The Apparatus
+2. Balanced up to e1.125e11 Steel
+3. Reworked some of the fundamentals with Material & automator data so the game doesn't break at higher values
+
+v0.2 - Radioactivity (May 12th 2021)
+
+1. Implemented Radioactivity
+2. Balanced up to e20,750,000 Steel
+3. Implemented Auto Super Battery Upgrades
+
+v0.1.1 - The Extension (May 8th 2021)
+
+1. Added a few more milestones
+2. Balanced up to e1,000,000 Steel
+3. Generalized material data (so technically there can be an infinite # of materials)
+
+v0.1 - The Foundation (May 4th 2021)
+
+1. Created the base game (automators, upgrades, materials, milestones, & the supercharger)
+2. Balanced up to Tsavorite unlock
+3. Implemented autosave & offline progression
