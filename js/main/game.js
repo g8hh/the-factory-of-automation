@@ -58,7 +58,7 @@ function save() {
 }
 
 function importSave() {
-	let data = prompt("Paste save data: ")
+	let data = prompt("在框里粘贴你的存档数据：")
 	if (data===undefined||data===null||data=="") return;
 	try {
 		player = JSON.parse(atob(data));
